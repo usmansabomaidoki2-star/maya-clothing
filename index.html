@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MAYA CLOTHING</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="logo">
+      MAYA <span>CLOTHING</span>
+    </div>
+
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Cart
+      <span id="cartCount">0</span>
+    </button>
+  </header>
+
+
+  <section class="hero">
+    <div class="hero-content">
+
+      <p class="small-title">WELCOME TO</p>
+
+      <h1>MAYA CLOTHING</h1>
+
+      <p>Your Style, Your Choice.</p>
+
+      <button onclick="scrollToShop()" class="shop-btn">
+        Shop Now
+      </button>
+
+    </div>
+  </section>
+
+
+  <main>
+
+    <section class="categories-section">
+
+      <h2>Shop by Category</h2>
+
+      <div id="categories" class="categories">
+        <button onclick="loadProducts()">All</button>
+      </div>
+
+    </section>
+
+
+    <section id="shop" class="products-section">
+
+      <div class="shop-heading">
+
+        <div>
+          <h2>Our Products</h2>
+          <p>Discover our latest fashion collection.</p>
+        </div>
+
+        <input
+          type="search"
+          id="search"
+          placeholder="🔍 Search products..."
+          oninput="searchProducts()"
+        >
+
+      </div>
+
+
+      <div id="products" class="products">
+
+        <div class="loading">
+          Loading products...
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- CART MODAL -->
+
+  <div id="cartModal" class="modal">
+
+    <div class="cart-box">
+
+      <div class="cart-header">
+
+        <h2>Your Cart</h2>
+
+        <button onclick="closeCart()">✕</button>
+
+      </div>
+
+      <div id="cartItems"></div>
+
+      <div class="cart-total">
+
+        <strong>Total:</strong>
+
+        <strong id="cartTotal">
+          ₦0
+        </strong>
+
+      </div>
+
+      <button class="checkout-btn">
+        Proceed to Checkout
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script src="app.js"></script>
+
+</body>
+</html>
