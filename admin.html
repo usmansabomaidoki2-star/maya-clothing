@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MAYA CLOTHING - Admin Dashboard</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f6f8;
+      font-family: Arial, sans-serif;
+      color: #111;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
+    #loginSection {
+      max-width: 430px;
+      margin: 70px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.08);
+    }
+
+    #loginSection h1 {
+      text-align: center;
+      margin: 0 0 8px;
+    }
+
+    #loginSection > p {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #111;
+    }
+
+    .admin-btn {
+      border: none;
+      padding: 11px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .admin-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .primary-btn {
+      background: #111;
+      color: #fff;
+    }
+
+    .secondary-btn {
+      background: #eee;
+      color: #111;
+    }
+
+    .danger-btn {
+      background: #b42318;
+      color: #fff;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 8px;
+      background: #111;
+      color: #fff;
+    }
+
+    .message {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+
+    .success-message {
+      display: block;
+      color: #16803c;
+      background: #eaf8ef;
+    }
+
+    .error-message {
+      display: block;
+      color: #b42318;
+      background: #fff0ee;
+    }
+
+    #dashboard {
+      display: none;
+    }
+
+    .admin-container {
+      max-width: 1250px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .admin-header {
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .admin-header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .admin-header p {
+      margin: 6px 0 0;
+      opacity: .8;
+    }
+
+    .logout-btn {
+      background: #fff;
+      color: #111;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 3px 15px rgba(0,0,0,.05);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 10px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 25px;
+    }
+
+    .admin-section {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 15px rgba(0,0,0,.04);
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+    }
+
+    #productFormBox {
+      display: none;
+      background: #f8f8f8;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    #productForm {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 18px;
+    }
+
+    .form-buttons {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th,
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f7f7f7;
+    }
+
+    .product-thumb {
+      width: 55px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #eee;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    .status-active {
+      color: #16803c;
+      font-weight: bold;
+    }
+
+    .status-inactive {
+      color: #b42318;
+      font-weight: bold;
+    }
+
+    .status-select {
+      padding: 7px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 9999;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      max-width: 700px;
+      margin: 35px auto;
+      background: #fff;
+      border-radius: 14px;
+      padding: 25px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+    }
+
+    .close-modal {
+      border: none;
+      background: #eee;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .customer-info {
+      background: #f7f7f7;
+      padding: 15px;
+      border-radius: 10px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .order-total {
+      text-align: right;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    @media (max-width: 1000px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .admin-container {
+        padding: 10px;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #productForm {
+        grid-template-columns: 1fr;
+      }
+
+      .form-buttons {
+        grid-column: auto;
+      }
+
+      .admin-section {
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #loginSection {
+        margin: 30px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+
+  <section id="loginSection">
+
+    <h1>MAYA CLOTHING</h1>
+
+    <p>Admin Login</p>
+
+    <form id="loginForm">
+
+      <div class="form-group">
+        <label for="adminEmail">Email</label>
+
+        <input
+          type="email"
+          id="adminEmail"
+          placeholder="Admin email"
+          autocomplete="username"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="adminPassword">Password</label>
+
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button
+        type="submit"
+        id="loginBtn"
+        class="admin-btn login-btn"
+      >
+        Login
+      </button>
+
+    </form>
+
+    <div id="loginMessage" class="message"></div>
+
+  </section>
+
+
+  <!-- DASHBOARD -->
+
+  <section id="dashboard">
+
+    <div class="admin-container">
+
+      <header class="admin-header">
+
+        <div>
+          <h1>MAYA CLOTHING</h1>
+          <p>Admin Dashboard</p>
+        </div>
+
+        <button
+          id="logoutBtn"
+          class="admin-btn logout-btn"
+        >
+          Logout
+        </button>
+
+      </header>
+
+
+      <!-- STATISTICS -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <h3>Total Orders</h3>
+          <strong id="totalOrders">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <h3>Pending</h3>
+          <strong id="pendingOrders">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <h3>Processing</h3>
+          <strong id="processingOrders">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <h3>Delivered</h3>
+          <strong id="deliveredOrders">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <h3>Total Sales</h3>
+          <strong id="totalSales">₦0</strong>
+        </div>
+
+      </div>
+
+
+      <!-- PRODUCTS -->
+
+      <div class="admin-section">
+
+        <div class="section-heading">
+
+          <h2>Product Management</h2>
+
+          <button
+            id="addProductBtn"
+            class="admin-btn primary-btn"
+          >
+            + Add Product
+          </button>
+
+        </div>
+
+        <div id="productMessage" class="message"></div>
+
+        <div id="productFormBox">
+
+          <form id="productForm">
+
+            <input type="hidden" id="productId">
+
+            <div class="form-group">
+              <label for="productName">Product Name *</label>
+
+              <input
+                type="text"
+                id="productName"
+                placeholder="Example: Men's T-Shirt"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="productCategory">Category *</label>
+
+              <select id="productCategory" required>
+                <option value="">Select Category</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="productPrice">Regular Price (₦) *</label>
+
+              <input
+                type="number"
+                id="productPrice"
+                min="0"
+                step="0.01"
+                placeholder="12000"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="productDiscountPrice">Discount Price (₦)</label>
+
+              <input
+                type="number"
+                id="productDiscountPrice"
+                min="0"
+                step="0.01"
+                placeholder="10000"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="productStock">Stock *</label>
+
+              <input
+                type="number"
+                id="productStock"
+                min="0"
+                placeholder="20"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="productImage">Product Image URL</label>
+
+              <input
+                type="url"
+                id="productImage"
+                placeholder="https://..."
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="productSizes">Sizes</label>
+
+              <input
+                type="text"
+                id="productSizes"
+                placeholder="M, L, XL, XXL"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="productColors">Colors</label>
+
+              <input
+                type="text"
+                id="productColors"
+                placeholder="Black, White, Blue"
+              >
+            </div>
+
+            <div class="form-group" style="grid-column:1 / -1;">
+              <label for="productDescription">Description</label>
+
+              <textarea
+                id="productDescription"
+                rows="4"
+                placeholder="Product description..."
+              ></textarea>
+            </div>
+
+            <div class="form-buttons">
+
+              <button
+                type="submit"
+                id="saveProductBtn"
+                class="admin-btn primary-btn"
+              >
+                Save Product
+              </button>
+
+              <button
+                type="button"
+                id="cancelProductBtn"
+                class="admin-btn secondary-btn"
+              >
+                Cancel
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+
+        <!-- PRODUCT TABLE -->
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="productsTableBody">
+              <tr>
+                <td colspan="7" class="empty-state">
+                  Loading products...
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <!-- ORDERS -->
+
+      <div class="admin-section">
+
+        <div class="section-heading">
+
+          <h2>Orders</h2>
+
+          <button
+            id="refreshOrdersBtn"
+            class="admin-btn secondary-btn"
+          >
+            Refresh Orders
+          </button>
+
+        </div>
+
+        <div id="ordersMessage" class="message"></div>
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="ordersTableBody">
+
+              <tr>
+                <td colspan="8" class="empty-state">
+                  Loading orders...
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ORDER MODAL -->
+
+  <div id="orderModal" class="modal">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h2 id="modalOrderTitle">
+          Order Details
+        </h2>
+
+        <button
+          id="closeModalBtn"
+          class="close-modal"
+          type="button"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div id="orderDetails">
+        Loading...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- ADMIN JAVASCRIPT -->
+
+  <script src="admin.js"></script>
+
+</body>
+</html>
