@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MAYA CLOTHING</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .cart-btn {
+      background: white;
+      color: #111827;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hero {
+      padding: 55px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #111827, #374151);
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      margin-bottom: 20px;
+    }
+
+    .shop-btn {
+      border: none;
+      background: white;
+      color: #111827;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .search {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .categories button {
+      white-space: nowrap;
+      border: 1px solid #ddd;
+      background: white;
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .categories button.active {
+      background: #111827;
+      color: white;
+      border-color: #111827;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    }
+
+    .product img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      background: #eee;
+      display: block;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product h3 {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .price {
+      font-size: 19px;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    .old-price {
+      color: #888;
+      text-decoration: line-through;
+      font-size: 14px;
+      margin-left: 5px;
+    }
+
+    .stock {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 7px;
+      background: #111827;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .add-btn:hover {
+      background: #000;
+    }
+
+    .add-btn:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 18px;
+      grid-column: 1 / -1;
+    }
+
+    .error-box {
+      text-align: center;
+      padding: 30px;
+      color: #b91c1c;
+      background: #fee2e2;
+      border-radius: 10px;
+      grid-column: 1 / -1;
+    }
+
+    /* CART */
+
+    .cart-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .cart-box {
+      background: white;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: 30px auto;
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .cart-header h2 {
+      font-size: 24px;
+    }
+
+    .close-cart {
+      border: none;
+      background: #eee;
+      font-size: 22px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item img {
+      width: 75px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #eee;
+      flex-shrink: 0;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-info h4 {
+      margin-bottom: 5px;
+    }
+
+    .cart-price {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .quantity-controls button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #111827;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .quantity-controls span {
+      min-width: 25px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .remove-btn {
+      margin-top: 8px;
+      border: none;
+      background: #dc2626;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 35px 10px;
+      color: #666;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 20px 0;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: #111827;
+      color: white;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 25px;
+      background: #111827;
+      color: white;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+
+      header {
+        padding: 14px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
+      .cart-btn {
+        padding: 9px 11px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .product img {
+        height: 180px;
+      }
+
+      .product-info {
+        padding: 11px;
+      }
+
+      .product h3 {
+        font-size: 15px;
+      }
+
+      .price {
+        font-size: 16px;
+      }
+
+      .add-btn {
+        font-size: 13px;
+        padding: 10px 5px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    MAYA CLOTHING
+  </div>
+
+  <button
+    class="cart-btn"
+    type="button"
+    onclick="openCart()"
+  >
+    🛒 Cart (<span id="cartCount">0</span>)
+  </button>
+
+</header>
+
+
+<section class="hero">
+
+  <h1>MAYA CLOTHING</h1>
+
+  <p>
+    Fashion • Style • Quality
+  </p>
+
+  <button
+    class="shop-btn"
+    type="button"
+    onclick="scrollToShop()"
+  >
+    Shop Now
+  </button>
+
+</section>
+
+
+<main
+  class="container"
+  id="shop"
+>
+
+  <input
+    type="search"
+    id="search"
+    class="search"
+    placeholder="Search products..."
+    autocomplete="off"
+    oninput="searchProducts()"
+  >
+
+
+  <div
+    id="categories"
+    class="categories"
+  >
+    Loading categories...
+  </div>
+
+
+  <div
+    id="products"
+    class="products"
+  >
+
+    <div class="loading">
+      Loading products...
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- CART MODAL -->
+
+<div
+  id="cartModal"
+  class="cart-modal"
+>
+
+  <div class="cart-box">
+
+    <div class="cart-header">
+
+      <h2>
+        🛒 Your Cart
+      </h2>
+
+      <button
+        class="close-cart"
+        type="button"
+        onclick="closeCart()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div id="cartItems">
+
+      <div class="cart-empty">
+        Your cart is empty.
+      </div>
+
+    </div>
+
+
+    <div class="cart-total">
+
+      <span>
+        Total
+      </span>
+
+      <span id="cartTotal">
+        ₦0
+      </span>
+
+    </div>
+
+
+    <button
+      class="checkout-btn"
+      type="button"
+      onclick="checkout()"
+    >
+      Proceed to Checkout
+    </button>
+
+  </div>
+
+</div>
+
+
+<footer>
+
+  <p>
+    © 2026 MAYA CLOTHING
+  </p>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- v=3 forces browser to load the new app.js -->
+
+<script src="./app.js?v=3"></script>
+
+</body>
+
+</html>
