@@ -842,6 +842,7 @@ function scrollToShop() {
 document.addEventListener(
   "DOMContentLoaded",
   () => {
+    console.log("MAYA APP.JS NEW VERSION LOADED");
 
     loadCategories();
 
