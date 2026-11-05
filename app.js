@@ -146,13 +146,14 @@ async function handlePaystackReturn() {
 
 async function verifyPaystackPayment(reference) {
   const { data, error } = await supabaseClient.functions.invoke(
-    "verify-paystack-payment",
-    {
-      body: {
-        reference: reference
-      }
+  "initialize-paystack-payment-",
+  {
+    body: {
+      customer,
+      items
     }
-  );
+  }
+);
 
   if (error) {
     let message = error.message || "Verification request failed.";
