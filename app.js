@@ -1005,15 +1005,16 @@ async function submitCheckout(event) {
 
     console.log("Sending checkout request...");
 
-    const { data, error } =
-      await supabaseClient.functions.invoke(
-        INITIALIZE_FUNCTION,
-        {
-          body: {
-            customer: customer,
-            items: items
-          }
-        }
+const { data, error } =
+  await supabaseClient.functions.invoke(
+    INITIALIZE_FUNCTION,
+    {
+      body: {
+        ...customer,
+        items: items
+      }
+    }
+  );
       );
 
     if (error) {
