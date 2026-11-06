@@ -1015,17 +1015,16 @@ const { data, error } =
       }
     }
   );
-      );
 
-    if (error) {
+if (error) {
 
-      console.error("Supabase Function Error:", error);
+  console.error("Supabase Function Error:", error);
 
-      throw new Error(
-        error.message || "Unable to contact payment server."
-      );
+  throw new Error(
+    error.message || "Unable to contact payment server."
+  );
 
-    }
+}
 
     console.log("Checkout response:", data);
 
